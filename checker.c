@@ -6,10 +6,10 @@ void print_warning_console(const char * alert_message)
 	
 }
 
-int batt_tempOk(float temperature)
+int batt_temp_range_check(float temperature)
 {
 	if(temperature < 0) {
-    	print_warning_console("temperature is lesser than lower threshold\n");
+    	print_warning_console("temperature is below than lower threshold\n");
     	return 0;
 	}
 	else if (temperature > 45){
@@ -20,10 +20,10 @@ int batt_tempOk(float temperature)
   
 }
 
-int batt_ChargeStateOk(float soc)
+int batt_ChargeState_range_check(float soc)
 {
 	if (soc < 20 ){
-	print_warning_console("ChargeState is lesser than lower threshold\n");
+	print_warning_console("ChargeState is below than lower threshold\n");
 	return 0;}
 	else if( soc > 80){
 	print_warning_console("ChargeState exceeds upper threshold\n");
@@ -41,13 +41,13 @@ int batt_ChargeRateOk(float chargeRate)
 
 void test_bms_pass(int temp,int chargestate,int chargerate) {
 	int result ;
-	result = batt_tempOk(temp)&& batt_ChargeStateOk(chargestate)&&batt_ChargeRateOk(chargerate);
+	result = batt_temp_range_check(temp)&& batt_ChargeState_range_check(chargestate)&&batt_ChargeRateOk(chargerate);
 	assert(result);
 	
 }
 void test_bms_fail(int temp,int chargestate,int chargerate)  {
 	int result ;
-	result =!( batt_tempOk(temp)&& batt_ChargeStateOk(chargestate)&&batt_ChargeRateOk(chargerate));
+	result =!( batt_temp_range_check(temp)&& batt_ChargeState_range_check(chargestate)&&batt_ChargeRateOk(chargerate));
 	assert(result);
 	
 }
