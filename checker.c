@@ -1,16 +1,20 @@
 #include <stdio.h>
 #include <assert.h>
-void print_warning(const char * alert_message)
+void print_warning_console(const char * alert_message)
 {
-	 printf("%s out of range!\n",alert_message);
+	 printf("%s",alert_message);
 	
 }
 
 int batt_tempOk(float temperature)
 {
-	if(temperature < 0 || temperature > 45) {
-    print_warning("temperature");
-    return 0;
+	if(temperature < 0) {
+    	print_warning_console("temperature is lesser than lower threshold\n");
+    	return 0;
+	}
+	else if (temperature > 45){
+	print_warning_console("temperature exceeds upper threshold\n");	
+	return 0;
 	}
 	else return 1;
   
@@ -18,8 +22,11 @@ int batt_tempOk(float temperature)
 
 int batt_ChargeStateOk(float soc)
 {
-	if (soc < 20 || soc > 80){
-	print_warning("ChargeState");
+	if (soc < 20 ){
+	print_warning_console("ChargeState is lesser than lower threshold\n");
+	return 0;}
+	else if( soc > 80){
+	print_warning_console("ChargeState exceeds upper threshold\n");
 	return 0;}
 	else return 1;
 }
@@ -27,7 +34,7 @@ int batt_ChargeStateOk(float soc)
 int batt_ChargeRateOk(float chargeRate)
 {
 	if(chargeRate > 0.8F){
-	print_warning("ChargeRate");
+	print_warning_console("ChargeRate exceeds upper threshold\n");
 	return 0;}	
 	else return 1;
 }
