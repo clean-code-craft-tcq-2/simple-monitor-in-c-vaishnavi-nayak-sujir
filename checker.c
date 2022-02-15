@@ -36,7 +36,27 @@ float farenhiet_to_celcius(float farenhiet_temp)
 	return ((farenhiet_temp)- 32) * 5 / 9;;
 	
 }
-
+float convert_temp_unitbased(char temp_unit , float temperature)
+{
+	float temp_celcius;
+		switch(temp_unit)
+	{/* convert any unit to celcius*/
+		case 'c':
+			temp_celcius = temperature;
+			break;
+		case 'k':
+			temp_celcius = kelvin_to_celcius(temperature);
+			break;
+		case 'f':
+			temp_celcius = farenhiet_to_celcius(temperature);
+			break;
+		default:
+		break;
+			
+	}
+	return temp_celcius;
+	
+}
 
 float convert_temp_celcius(char* input_temperature)
 {
@@ -49,23 +69,9 @@ float convert_temp_celcius(char* input_temperature)
 		temperature[i]=input_temperature[i];// extract all chars of input temperature except last character that has units
 	}
 	temperature[i]='\0';	
+	
+	temp_celcius =  convert_temp_unitbased(temp_unit,atof(temperature));
 
-
-	switch(temp_unit)
-	{/* convert any unit to celcius*/
-		case 'c':
-			temp_celcius = atof(temperature);
-			break;
-		case 'k':
-			temp_celcius = kelvin_to_celcius(atof(temperature));
-			break;
-		case 'f':
-			temp_celcius = farenhiet_to_celcius(atof(temperature));
-			break;
-		default:
-		break;
-			
-	}
 	return temp_celcius;
 	
 }
