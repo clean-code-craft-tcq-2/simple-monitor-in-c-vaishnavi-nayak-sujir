@@ -90,7 +90,7 @@ int bms_temp_warning(float temperature)
 
 int bms_temp_error(float temperature)
 {
-	temp_error_level =1;
+
 	if(temperature < LOW_TEMP_BREACH) {
     	print_warning_console("temperature is below lower threshold\n");
     	return 0;
