@@ -127,7 +127,7 @@ int bms_chargerate_warning(float chargeRate)
 
 int batt_temp_range_check(char* temperature)
 {
-	int temp_error_level=1;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
+	int temp_error_level;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
 	float temp_celcius=  convert_temp_celcius(temperature);
 	temp_error_level = bms_temp_error(temp_celcius);
 #if (BMS_TEMP_WARNING == 1)
