@@ -20,7 +20,7 @@
 #define CHARGE_RATE_WARNING 0.7F 
 #define CHARGE_RATE_BREACH 0.8F
 
-int temp_error_level;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
+int temp_error_level=1;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
 void print_warning_console(const char * alert_message)
 {
 	 printf("%s",alert_message);
@@ -77,15 +77,16 @@ float convert_temp_celcius(char* input_temperature)
 int bms_temp_warning(float temperature)
 {
 
+	
 	if(temperature < LOW_TEMP_WARNING && temperature >= LOW_TEMP_BREACH){
 	print_warning_console("Early warning for lower temperature \n");	
-	return 2;
+	temp_error_level =  2;
 	}
 	else if(temperature > HIGH_TEMP_WARNING && temperature <= HIGH_TEMP_BREACH){
 	print_warning_console("Early warning for higher temperature \n");	
-	return 2;
+	temp_error_level =  2;
 	}
-	return 1;
+	return temp_error_level;
 }
 
 int bms_temp_error(float temperature)
@@ -93,16 +94,13 @@ int bms_temp_error(float temperature)
 
 	if(temperature < LOW_TEMP_BREACH) {
     	print_warning_console("temperature is below lower threshold\n");
-    	return 0;
+    	temp_error_level=  0;
 	}
 	else if (temperature > HIGH_TEMP_BREACH){
 		print_warning_console("temperature exceeds upper threshold\n");	
-		return 0;
+		temp_error_level = 0;
 	}
-#if (BMS_TEMP_WARNING == 1)	
-	return   bms_temp_warning(temperature);
-#endif
-	
+	return temp_error_level;
 }
 
 int bms_chargestate_warning(float soc)
@@ -131,7 +129,11 @@ int bms_chargerate_warning(float chargeRate)
 int batt_temp_range_check(char* temperature)
 {
 	float temp_celcius=  convert_temp_celcius(temperature);
-	return bms_temp_error(temp_celcius);;
+	int temp_error_level = bms_temp_error(temp_celcius);
+	#if (BMS_TEMP_WARNING == 1)	
+	temp_error_level =    bms_temp_warning(temp_celcius);
+	#endif
+	return temp_error_level;
   
 }
 
