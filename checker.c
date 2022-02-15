@@ -41,9 +41,7 @@ float convert_temp_unitbased(char temp_unit , float temperature)
 	float temp_celcius;
 		switch(temp_unit)
 	{/* convert any unit to celcius*/
-		case 'c':
-			temp_celcius = temperature;
-			break;
+
 		case 'k':
 			temp_celcius = kelvin_to_celcius(temperature);
 			break;
@@ -51,6 +49,7 @@ float convert_temp_unitbased(char temp_unit , float temperature)
 			temp_celcius = farenhiet_to_celcius(temperature);
 			break;
 		default:
+			temp_celcius = temperature;
 		break;
 			
 	}
