@@ -21,6 +21,7 @@
 #define CHARGE_RATE_BREACH 0.8F
 
 int temp_error_level=1;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
+int soc_error_level =1;
 void print_warning_console(const char * alert_message)
 {
 	 printf("%s",alert_message);
@@ -86,7 +87,7 @@ int bms_temp_warning(float temperature)
 	print_warning_console("Early warning for higher temperature \n");	
 	return 2;
 	}
-	return temp_error_level;
+	return 1;
 }
 
 int bms_temp_error(float temperature)
@@ -107,13 +108,13 @@ int bms_chargestate_warning(float soc)
 {
 	if(soc < LOW_SOC_WARNING){
 	print_warning_console("Early warning for charge state \n");	
-	return 1;
+	return 2;
 	}
 	else if(soc > HIGH_SOC_WARNING){
 	print_warning_console("Early warning for higher charge state \n");	
-	return 1;
+	return 2;
 	}
-	return 0;
+	return 1;
 }
 
 int bms_chargerate_warning(float chargeRate)
@@ -139,25 +140,27 @@ int batt_temp_range_check(char* temperature)
 	return temp_error_level;
   
 }
-
+int bms_ChargeState_error(float soc)
+{
+	if (soc < LOW_SOC_BREACH ) {
+    	print_warning_console("ChargeState is below than lower threshold\n");
+    	return   0;
+	}
+	else if ( soc > HIGH_SOC_BREACH){
+		print_warning_console("ChargeState exceeds upper threshold\n");	
+		return   0;
+	}
+	return 1;	
+	
+	
+}
 int batt_ChargeState_range_check(float soc)
 {
-	int soc_error_level=1;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
-	if (soc < LOW_SOC_BREACH ){
-		
-	print_warning_console("ChargeState is below than lower threshold\n");
-	
-	soc_error_level=0;
-	}
-	else if( soc > HIGH_SOC_BREACH){
-		
-	print_warning_console("ChargeState exceeds upper threshold\n");
-	
-	soc_error_level=0;
-	}
+	int soc_error_level = bms_ChargeState_error(soc);// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
+
 #if (BMS_CHARGESTATE_WARNING == 1)
 	if (soc_error_level !=0){//Issue warning only if above error condition not occured
-	soc_error_level =  bms_chargestate_warning(soc)?2:soc_error_level;
+	soc_error_level =  bms_chargestate_warning(soc);
 	}
 #endif
 	 return soc_error_level;
