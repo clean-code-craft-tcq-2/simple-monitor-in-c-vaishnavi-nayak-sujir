@@ -88,6 +88,20 @@ int bms_temp_warning(float temperature)
 	return 0;
 }
 
+int bms_temp_error(float temperature)
+{
+
+	if(temperature < LOW_TEMP_BREACH) {
+    	print_warning_console("temperature is below lower threshold\n");
+    	return 0;
+	}
+	else if (temperature > HIGH_TEMP_BREACH){
+		print_warning_console("temperature exceeds upper threshold\n");	
+		return 0;
+	}
+	return 1;
+}
+
 int bms_chargestate_warning(float soc)
 {
 	if(soc < LOW_SOC_WARNING){
@@ -115,14 +129,7 @@ int batt_temp_range_check(char* temperature)
 {
 	int temp_error_level=1;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
 	float temp_celcius=  convert_temp_celcius(temperature);
-	if(temp_celcius < LOW_TEMP_BREACH) {
-    	print_warning_console("temperature is below lower threshold\n");
-    	temp_error_level= 0;
-	}
-	else if (temp_celcius > HIGH_TEMP_BREACH){
-		print_warning_console("temperature exceeds upper threshold\n");	
-		temp_error_level= 0;
-	}
+	temp_error_level = bms_temp_error(temp_celcius);
 #if (BMS_TEMP_WARNING == 1)
 	if(temp_error_level !=0){//Issue warning only if above error condition not occured
 	
