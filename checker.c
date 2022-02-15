@@ -93,16 +93,16 @@ int bms_temp_error(float temperature)
 	temp_error_level =1;
 	if(temperature < LOW_TEMP_BREACH) {
     	print_warning_console("temperature is below lower threshold\n");
-    	temp_error_level= 0;
+    	return 0;
 	}
 	else if (temperature > HIGH_TEMP_BREACH){
 		print_warning_console("temperature exceeds upper threshold\n");	
-		temp_error_level= 0;
+		return 0;
 	}
 #if (BMS_TEMP_WARNING == 1)	
-	temp_error_level =  bms_temp_warning(temperature)?2:temp_error_level;
+	return   bms_temp_warning(temperature)?2:1;
 #endif
-	return temp_error_level;
+	
 }
 
 int bms_chargestate_warning(float soc)
