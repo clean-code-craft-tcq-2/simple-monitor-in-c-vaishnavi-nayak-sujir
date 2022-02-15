@@ -121,9 +121,9 @@ int bms_chargerate_warning(float chargeRate)
 {
 	if(chargeRate > CHARGE_RATE_WARNING){
 	print_warning_console("Early warning for higher charge rate \n");	
-	return 1;
+	return 2;
 	}
-	return 0;
+	return 1;
 }
 
 
@@ -165,20 +165,24 @@ int batt_ChargeState_range_check(float soc)
 #endif
 	 return soc_error_level;
 }
+int bms_ChargeRate_error(float chargeRate)
+{
+	if(chargeRate > CHARGE_RATE_BREACH) {
+    	print_warning_console("ChargeRate exceeds upper threshold\n");
+    	return   0;
+	}
+	return 1;	
+	
+	
+}
 
 int batt_ChargeRateOk(float chargeRate)
 {
-	int chargeRate_error_level=1;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
-	
-	if(chargeRate > CHARGE_RATE_BREACH){
+	int chargeRate_error_level = bms_ChargeRate_error(chargeRate);// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
 		
-	print_warning_console("ChargeRate exceeds upper threshold\n");
-	
-	chargeRate_error_level =0;
-	}	
 #if (BMS_CHARGERTATE_WARNING == 1)
 	if (chargeRate_error_level !=0){//Issue warning only if above error condition not occured
-	chargeRate_error_level= bms_chargerate_warning(chargeRate)?2:chargeRate_error_level;
+	chargeRate_error_level= bms_chargerate_warning(chargeRate);
 	}
 #endif
 	return chargeRate_error_level;
