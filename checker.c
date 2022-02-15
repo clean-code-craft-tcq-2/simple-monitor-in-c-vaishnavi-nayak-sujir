@@ -79,13 +79,13 @@ int bms_temp_warning(float temperature)
 
 	if(temperature < LOW_TEMP_WARNING && temperature >= LOW_TEMP_BREACH){
 	print_warning_console("Early warning for lower temperature \n");	
-	return 1;
+	return 2;
 	}
 	else if(temperature > HIGH_TEMP_WARNING && temperature <= HIGH_TEMP_BREACH){
 	print_warning_console("Early warning for higher temperature \n");	
-	return 1;
+	return 2;
 	}
-	return 0;
+	return 1;
 }
 
 int bms_temp_error(float temperature)
@@ -100,7 +100,7 @@ int bms_temp_error(float temperature)
 		return 0;
 	}
 #if (BMS_TEMP_WARNING == 1)	
-	return   bms_temp_warning(temperature)?2:1;
+	return   bms_temp_warning(temperature);
 #endif
 	
 }
