@@ -77,11 +77,11 @@ float convert_temp_celcius(char* input_temperature)
 int bms_temp_warning(float temperature)
 {
 
-	if(temperature < LOW_TEMP_WARNING ){
+	if(temperature < LOW_TEMP_WARNING && temperature >= LOW_TEMP_BREACH){
 	print_warning_console("Early warning for lower temperature \n");	
 	return 1;
 	}
-	else if(temperature > HIGH_TEMP_WARNING ){
+	else if(temperature > HIGH_TEMP_WARNING && temperature <= HIGH_TEMP_BREACH){
 	print_warning_console("Early warning for higher temperature \n");	
 	return 1;
 	}
@@ -99,11 +99,8 @@ int bms_temp_error(float temperature)
 		print_warning_console("temperature exceeds upper threshold\n");	
 		temp_error_level= 0;
 	}
-#if (BMS_TEMP_WARNING == 1)
-	if(temp_error_level !=0){//Issue warning only if above error condition not occured
-	
+#if (BMS_TEMP_WARNING == 1)	
 	temp_error_level =  bms_temp_warning(temperature)?2:temp_error_level;
-	}
 #endif
 	return temp_error_level;
 }
