@@ -20,8 +20,7 @@
 #define CHARGE_RATE_WARNING 0.7F 
 #define CHARGE_RATE_BREACH 0.8F
 
-int temp_error_level=1;// 0: exceeds upper and lower threshold, 1: no error , 2: warning 
-int soc_error_level =1;
+
 void print_warning_console(const char * alert_message)
 {
 	 printf("%s",alert_message);
@@ -229,7 +228,7 @@ int main() {
   test_bms_warning("45c",70,0.7f);//Test celcius :temperature boundary check
   test_bms_warning("318.15k",70,0.7f);//Test celcius :Test kelvin:temperature boundary check
   test_bms_warning("113f",70,0.7f);//Test celcius :Test kelvin:temperature boundary check
-  test_bms_warning("25c",70,0.75F);//temperature lower threshold early warning
+  test_bms_warning("25c",70,0.75F);//charge rate early warning
   test_bms_warning("4c",70,0.7f);//temperature lower threshold early warning
   test_bms_warning("277.15k",70,0.7f);//Test kelvin:temperature lower threshold early warning
   test_bms_warning("42c",70,0.7f);//temperature upper threshold early 
